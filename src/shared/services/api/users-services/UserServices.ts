@@ -1,17 +1,29 @@
 import { Api } from "../axios"
 
-interface ICreateUser {
+export interface ICreateUser {
   email: string;
   username: string;
   password: string;
-  birthdate: string;
+  birthdate?: string;
 }
 
-const createUser = async (formData: ICreateUser): Promise<any> => {
+const createUser = async (formData: {}): Promise<ICreateUser | Error> => {
   try {
-    const relativeUrl = `/auth/signup`
+    const relativeUrl = "/auth/signup"
 
-    const { data } = await Api.post(relativeUrl, formData)
+    const { data } = await Api.post(
+      relativeUrl,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        auth: {
+          username: "client",
+          password: "123"
+        }
+      }
+    )
 
     if (data) return data;
 

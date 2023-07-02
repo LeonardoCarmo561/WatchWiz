@@ -1,13 +1,15 @@
 import * as yup from "yup";
 
 export interface IFormData {
-  email: string;
+  username: string;
   password: string;
+  grant_type: string;
 }
 
 const formValidationSchema = yup.object().shape({
-  email: yup.string().required().email(),
-  password: yup.string().required().min(6)
+  username: yup.string().required(),
+  password: yup.string().required().min(6),
+  grant_type: yup.string().required(),
 });
 
 export default formValidationSchema

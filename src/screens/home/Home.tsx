@@ -25,15 +25,6 @@ export default function Home({ navigation }: any) {
     >
       <StatusBar style="light" translucent />
       <ScrollView>
-        <View className="p-4 bg-gray-900">
-          <TextInput
-            value={search}
-            onChangeText={(value) => setSearch(value)}
-            placeholder="Pesquisar..."
-            placeholderTextColor="rgb(147, 51, 234)"
-            className="w-full border-purple-600 border-[1px] rounded-[20px] h-[50px] p-2"
-          />
-        </View>
         <View className="flex flex-row gap-2">
           <View className="h-[225px] w-[150px] border-black border-[.5px] rounded-[20px]">
             <Image

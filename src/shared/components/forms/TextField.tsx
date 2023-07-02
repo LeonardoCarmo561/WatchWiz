@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Text, TextInput, TextInputProps } from 'react-native';
-import { useField } from '@unform/core'
+import { useState, useEffect } from "react";
+import { TextInput, Text, TextInputProps } from "react-native"
+import { useField } from "@unform/core"
 
-export type TextFieldProps = TextInputProps & {
+type TextFieldProps = TextInputProps & {
   name: string;
-  errorClassName?: string;
 }
 
-export default function TextField({
+export function TextField({
   name,
-  errorClassName,
   ...rest
 }: TextFieldProps) {
-  const { clearError, defaultValue, error, fieldName, registerField } = useField(name);
+  const { fieldName, registerField, error, clearError, defaultValue } = useField(name);
+
   const [value, setValue] = useState(defaultValue || '');
 
   useEffect(() => {
@@ -21,16 +20,32 @@ export default function TextField({
       getValue: () => value,
       setValue: (_, newValue) => setValue(newValue),
     })
-  }, [value])
+  }, [fieldName, registerField, value])
 
   return (
     <>
       <TextInput
-        value={value}
-        onChangeText={(text) => {setValue(text); clearError()}}
         {...rest}
+        value={value}
+        onChangeText={(value) => {
+          setValue(value);
+          clearError();
+        }}
+        className={
+          rest.className
+          ? rest.className
+          : `border-purple-600
+            border-[1px]
+            rounded-[20px]
+            h-[50px]
+            w-full
+            bg-purple-500
+            p-2`
+        }
       />
-      {error && <Text className='text-center text-red-600'>{error}</Text>}
+      {!!error && (
+        <Text className="text-red-600">{error}</Text>
+      )}
     </>
   )
 }

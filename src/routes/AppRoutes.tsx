@@ -1,13 +1,16 @@
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import WatchList from "../screens/watchlist/WatchList";
 import Home from "../screens/home/Home";
 import Profile from "../screens/profile/Profile";
+import Posts from "../screens/posts/Posts";
+import Search from "../screens/search/Search";
+import WatchlistRoutes from "../screens/watchlist";
 
 const { Screen, Navigator } = createBottomTabNavigator();
 
-export function AppRoutes() {
+export default function AppRoutes() {
   return (
     <Navigator
       initialRouteName="home"
@@ -26,8 +29,8 @@ export function AppRoutes() {
       }}
     >
       <Screen
-        name="list"
-        component={WatchList}
+        name="watchlist"
+        component={WatchlistRoutes}
         options={{
           tabBarIcon: ({ size, focused }) => (
             <Feather
@@ -49,6 +52,32 @@ export function AppRoutes() {
               color={focused ? "#fff" : "rgb(17, 24, 39 )"}
             />
           ),
+        }}
+      />
+      <Screen
+        name="post"
+        component={Posts}
+        options={{
+          tabBarIcon: ({ size, focused }) => (
+            <MaterialIcons
+              name="add-a-photo"
+              size={size}
+              color={focused ? "#fff" : "rgb(17, 24, 39)"}
+            />
+          )
+        }}
+      />
+      <Screen
+        name="pesquisar"
+        component={Search}
+        options={{
+          tabBarIcon: ({ size, focused }) => (
+            <MaterialIcons
+              name="search"
+              size={size}
+              color={focused ? "#fff" : "rgb(17, 24, 39)"}
+            />
+          )
         }}
       />
       <Screen

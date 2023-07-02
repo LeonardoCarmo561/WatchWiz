@@ -1,6 +1,13 @@
-import { View, Text, Image, TextInput } from "react-native";
+import { View, Text, Image, TextInput, Pressable } from "react-native";
+import { useAuthContext } from "../../shared/contexts/AuthContext";
+
+import { MaterialIcons } from "@expo/vector-icons"
 
 export default function Profile() {
+
+  const { logout } = useAuthContext();
+  const { user } = useAuthContext();
+
   return (
     <View
       className="
@@ -12,6 +19,20 @@ export default function Profile() {
       "
     >
       <View className="p-4 items-center flex">
+        <Pressable
+          onPress={logout}
+          className="
+            flex
+            right-4
+            absolute
+          "
+        >
+          <MaterialIcons
+            size={30}
+            name="exit-to-app"
+            color="rgb(147, 51, 234)"
+          />
+        </Pressable>
         <Image
           className="w-[150px] h-[150px] rounded-full"
           source={{

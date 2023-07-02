@@ -1,11 +1,16 @@
-import { createContext, useState, useContext } from "react";
-import { login } from "../services/api/login";
+import { createContext, useState, useContext, useCallback, useEffect } from "react";
+import { useStorageContext } from "./StorageContext";
+
+interface UserData {
+  access_token: string;
+  refresh_token: string;
+}
 
 interface AuthContextData {
-  signed: boolean;
-  user: object | null;
-  signin(data: {}): void;
   logout(): void;
+  signed: boolean;
+  user: UserData | null;
+  setUser(data: UserData): void;
 }
 
 interface AuthProviderProps {
@@ -15,24 +20,34 @@ interface AuthProviderProps {
 const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<object | null>(null);
-  
+  const [user, setUser] = useState<UserData | null>(null);
+
+  const { storage } = useStorageContext()
+
   const logout = () => {
     setUser(null)
+    storage.delete("access_token")
+    storage.delete("refresh_token")
   }
 
-  const signIn = (formData: {}) => {
-    login(formData).then((result) => {
-      if (result instanceof Error) {
-        setUser({name: "Leonardo", email: "leo@leo.com"})
-      } else {
-        setUser({name: "Leonardo", email: "leo@leo.com"})
-      }
-    })
-  }
+  const handleSetUser = useCallback((data: UserData) => {
+    setUser(data)
+  }, [])
+
+  useEffect(() => {
+    const accessToken = storage.getString("access_token")
+    const refreshToken = storage.getString("refresh_token")
+
+    if (accessToken && refreshToken) {
+      setUser({
+        access_token: accessToken,
+        refresh_token: refreshToken
+      })
+    }
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, signin: signIn, user: user, logout: logout }}>
+    <AuthContext.Provider value={{ signed: !!user, user: user, setUser: handleSetUser, logout: logout }}>
       {children}
     </AuthContext.Provider>
   )

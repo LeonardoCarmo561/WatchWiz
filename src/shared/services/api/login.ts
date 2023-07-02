@@ -1,18 +1,30 @@
 import { Api } from "./axios"
 
+interface UserData {
+  access_token: string;
+  refresh_token: string;
+}
 
-async function login(formData: {}): Promise<Error | {detail: string}> {
+const login = async (formData: {}): Promise<UserData | Error> => {
   try {
-    const relativeUrl = "/login"
+    const relativeUrl = "/oauth/token"
 
-    const { data } = await Api.post(relativeUrl, formData)
+    const { data } = await Api.post(relativeUrl, formData, {
+      auth: {
+        username: "client",
+        password: "123"
+      },
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
 
-    if (data) return data
+    if (data) return data;
 
-    return new Error("erro ao fazer login")
+    return new Error("Erro ao voltar string")
   } catch (error) {
     console.error(error)
-    return new Error((error as {message: string}).message)
+    return new Error("Erro")
   }
 }
 
