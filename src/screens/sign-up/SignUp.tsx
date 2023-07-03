@@ -71,6 +71,13 @@ export default function SignUp({ navigation }: any) {
             />
             <TextField
               name="birthdate"
+              keyboardType="number-pad"
+              format={(e) => {
+                var str = e.replace(/[^\d]/g, "")
+                str = str.replace(/(\d{2})(\d{2})(\d{4})/, "$1/$2/$3")
+
+                return str
+              }}
               placeholder="Data de nascimento"
             />
             <View

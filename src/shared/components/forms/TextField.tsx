@@ -4,10 +4,12 @@ import { useField } from "@unform/core"
 
 type TextFieldProps = TextInputProps & {
   name: string;
+  format?(e: string): string;
 }
 
 export function TextField({
   name,
+  format = (e) => e,
   ...rest
 }: TextFieldProps) {
   const { fieldName, registerField, error, clearError, defaultValue } = useField(name);
@@ -26,7 +28,7 @@ export function TextField({
     <>
       <TextInput
         {...rest}
-        value={value}
+        value={format(value)}
         onChangeText={(value) => {
           setValue(value);
           clearError();

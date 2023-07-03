@@ -92,7 +92,7 @@ export default function WatchList({ navigation }: any) {
             <MovieContainer
               key={index}
               title={movie.title}
-              image={movie.posterUrl}
+              image={movie.posterUrl!}
               onPress={() => {
                 setImdbId(movie.imdbId);
                 navigation.navigate("detail");

@@ -32,8 +32,9 @@ export default function Posts() {
   return (
     <BasePage>
       <ScrollView className="w-full">
-        {data.map((post) => (
+        {data.map((post, index) => (
           <Post
+            key={index}
             postData={post}
             viewCommentButton
           />

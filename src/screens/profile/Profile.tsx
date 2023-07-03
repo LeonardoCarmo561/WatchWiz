@@ -2,11 +2,17 @@ import { View, Text, Image, TextInput, Pressable } from "react-native";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 
 import { MaterialIcons } from "@expo/vector-icons"
+import { useEffect } from "react";
+import { getProfile } from "../../shared/services/api/profile-services";
 
 export default function Profile() {
 
   const { logout } = useAuthContext();
   const { user } = useAuthContext();
+
+  useEffect(() => {
+    getProfile(String(user?.access_token))
+  }, [])
 
   return (
     <View
