@@ -1,11 +1,32 @@
 import { View, TextInput, ScrollView } from "react-native";
 import BasePage from "../../shared/components/page/Page";
 import { useEffect, useState } from "react";
+import { useDebounce } from "../../shared/hooks";
+import { Movie, searchByTitle } from "../../shared/services/api";
+import { useAuthContext } from "../../shared/contexts/AuthContext";
+import { MovieContainer } from "../../shared/components";
 
 export default function Search() {
+  const { debounce } = useDebounce(1500);
+  const { user } = useAuthContext();
+
   const [search, setSearch] = useState("");
 
-  useEffect(() => {}, []);
+  const [data, setData] = useState<Movie[]>([]);
+
+  useEffect(() => {
+    if (search !== "") {
+      debounce(() => {
+        searchByTitle(String(user?.access_token), search).then((result) => {
+          if (result instanceof Error) {
+            alert("Erro ao pesquisar filmes");
+          } else {
+            setData(result);
+          }
+        });
+      });
+    }
+  }, [search]);
 
   return (
     <BasePage>
@@ -32,7 +53,15 @@ export default function Search() {
           "
         />
       </View>
-      <ScrollView></ScrollView>
+      <ScrollView className="w-full">
+        {data.map((movie) => (
+          <MovieContainer
+            image={movie.posterUrls.original}
+            onPress={() => {}}
+            title={movie.title}
+          />
+        ))}
+      </ScrollView>
     </BasePage>
   );
 }

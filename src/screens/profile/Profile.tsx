@@ -2,16 +2,25 @@ import { View, Text, Image, TextInput, Pressable } from "react-native";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 
 import { MaterialIcons } from "@expo/vector-icons"
-import { useEffect } from "react";
-import { getProfile } from "../../shared/services/api/profile-services";
+import { useEffect, useState } from "react";
+import { ProfileData, getProfile } from "../../shared/services/api/profile-services";
 
 export default function Profile() {
 
   const { logout } = useAuthContext();
   const { user } = useAuthContext();
 
+  const [data, setData] = useState<ProfileData>();
+
   useEffect(() => {
     getProfile(String(user?.access_token))
+    .then((result) => {
+      if (result instanceof Error) {
+        console.error("Erro ao carregar dados do perfil")
+      } else {
+        setData(result)
+      }
+    })
   }, [])
 
   return (
@@ -45,13 +54,13 @@ export default function Profile() {
             uri: "https://marketplace.canva.com/EAFEits4-uw/1/0/800w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-r0bPCSjUqg0.jpg",
           }}
         />
-        <Text className="font-bold text-[20px] text-purple-600">Olá, Leonardo!</Text>
+        <Text className="font-bold text-[20px] text-purple-600">Olá, {data?.username}!</Text>
         <Text className="text-purple-600">clique na foto para editar</Text>
       </View>
       <View className="flex flex-1 flex-col">
         <View className="flex p-2">
           <TextInput
-            value="Leonardo Carmo"
+            value={data?.username || ""}
             className="
               p-4
               text-[15px]
@@ -66,7 +75,7 @@ export default function Profile() {
         </View>
         <View className="flex p-2">
           <TextInput
-            value="carmoleo@gmail.com"
+            value={data?.email || ""}
             className="
               p-4
               text-[15px]

@@ -33,6 +33,26 @@ async function getMovieByImdbId(accessToken: string, imdbId: string, country: st
   }
 }
 
+async function searchByTitle(accessToken: string, title: string, country: string = "us"): Promise<Movie[] | Error> {
+  try {
+    const relativeUrl = ``
+
+    const { data } = await Api.get(relativeUrl, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+
+    if (data) return data;
+
+    return new Error("Erro ao pesquisar filmes")
+  } catch (error) {
+    console.error(error)
+    return new Error((error as {message: string}).message)
+  }
+}
+
 export {
-  getMovieByImdbId
+  getMovieByImdbId,
+  searchByTitle
 }

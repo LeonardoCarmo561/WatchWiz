@@ -22,7 +22,7 @@ export default function Home({ navigation }: any) {
   const [getNewMovie, setGetNewMovie] = useState(true)
 
   useEffect(() => {
-    getRecomendations(String(user?.access_token), 0, 5)
+    getRecomendations(String(user?.access_token), 0, 10)
     .then((result) => {
       if (result instanceof Error) {
         alert("Erro")
@@ -46,6 +46,8 @@ export default function Home({ navigation }: any) {
     }
   }, [getNewMovie])
 
+  console.log(user?.access_token)
+
   return (
     <View
       className="
@@ -58,36 +60,40 @@ export default function Home({ navigation }: any) {
     >
       <StatusBar style="light" translucent />
       <ScrollView>
-        <View className="flex flex-row gap-2">
+        <View className="flex flex-row gap-2 w-full">
           <View className="h-[225px] w-[150px] border-black border-[.5px] rounded-[20px]">
             <Image
               className="w-full h-full rounded-[20px]"
               source={{
-                uri: "https://i.pinimg.com/originals/ed/ff/ac/edffac2e5c812bb7db9b1de2412929bf.jpg",
+                uri: currentMovie?.posterUrl || "",
               }}
             />
           </View>
-          <View className="flex flex-wrap w-full">
-            <Text className="text-purple-600 flex-wrap text-[20px]">
-              Filme sorteado:
+          <View
+            className="flex flex-1"
+          >
+            <Text
+              className="
+                text-center
+                text-ellipsis
+                text-purple-500
+                font-bold
+                text-[17px]
+              "
+              numberOfLines={2}
+            >
+              {currentMovie?.title || ""}
             </Text>
-            <Text className="text-purple-600 font-bold text-[20px]">
-              Minha Mãe É Uma Peça
+            <Text
+              className="
+                text-purple-700
+                text-[15px]
+                text-justify
+              "
+              numberOfLines={10}
+            >
+              {currentMovie?.overview || ""}
             </Text>
-            <View className="flex flex-wrap w-full flex-row mr-2">
-              <Text
-                className="text-purple-600 text-justify break-words"
-                style={{ flex: 1, flexWrap: "wrap" }}
-              >
-                Sinopse: Dona Hermínia é uma senhora de meia-idade, divorciada
-                do marido, que a trocou por uma mulher mais jovem. Hiperativa,
-                ela não larga o pé de seus filhos Marcelina e Juliano. Um dia,
-                após descobrir que eles a consideram chata, ela resolve sair de
-                casa sem avisar ninguém, deixando todos preocupados. Dona
-                Hermínia decide visitar a querida tia Zélia para desabafar suas
-                tristezas atuais e recordar os bons tempos do passado.
-              </Text>
-            </View>
           </View>
         </View>
         <Pressable className="mt-4 flex justify-center items-center rounded-[20px] bg-purple-600 w-full h-[50px] border-purple-600 border-[2px]"
