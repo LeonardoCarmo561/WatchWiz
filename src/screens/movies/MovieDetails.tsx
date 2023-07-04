@@ -5,13 +5,13 @@ import { Skeleton } from "moti/skeleton";
 
 import { useDebounce } from "../../shared/hooks";
 import BasePage from "../../shared/components/page/Page";
-import { useMovieDetailContext } from "../../shared/contexts/DetailMovieContext"
+import { useDetailScreenContext } from "../../shared/contexts/DetailScreenContext"
 import { Movie, getMovieByImdbId } from "../../shared/services/api/movies-services";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import Display from "../../shared/components/display/Display";
 
 export default function MovieDetails() {
-  const { imdbId } = useMovieDetailContext();
+  const { detailMovie } = useDetailScreenContext();
   const { debounce } = useDebounce(1500, true);
   const { user } = useAuthContext();
 
@@ -25,7 +25,7 @@ export default function MovieDetails() {
   useEffect(() => {
     setIsLoading(true)
     debounce(() => {
-      getMovieByImdbId(String(user?.access_token), imdbId)
+      getMovieByImdbId(String(user?.access_token), detailMovie.imdbId)
       .then((result) => {
         setIsLoading(false)
         if (result instanceof Error) {
@@ -35,7 +35,7 @@ export default function MovieDetails() {
         }
       })
     })
-  }, [imdbId])
+  }, [detailMovie.imdbId])
 
   return (
     <BasePage>

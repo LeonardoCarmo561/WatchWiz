@@ -34,6 +34,26 @@ const createUser = async (formData: {}): Promise<ICreateUser | Error> => {
   }
 }
 
+async function getByUsername(accessToken: string, username: string) {
+  try {
+    const relativeUrl = `/users/${username}`
+
+    const { data } = await Api.get(relativeUrl, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+
+    if (data) return data;
+
+    return new Error("Erro ao procurar usuário")
+  } catch (error) {
+    console.error(error)
+    return new Error((error as {message: string}).message)
+  }
+}
+
 export {
-  createUser
+  createUser,
+  getByUsername
 }

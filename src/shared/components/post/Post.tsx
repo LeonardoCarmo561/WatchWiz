@@ -7,32 +7,49 @@ import { useAuthContext } from "../../contexts/AuthContext";
 
 interface PostProps {
   postData: PostContent;
+  onCommentPress?(): void;
   viewCommentButton?: boolean;
 }
 
-export default function Post({ postData, viewCommentButton = false }: PostProps) {
+export default function Post({ postData, viewCommentButton = false, onCommentPress }: PostProps) {
 
   const { user } = useAuthContext();
-  const [firstTime, setFirstTime] = useState(true);
   const [liked, setLiked] = useState(false);
+  const [firstTime, setFirstTime] = useState(true);
+
+  const [change, setChange] = useState(false);
+
+  console.log(user?.access_token)
 
   useEffect(() => {
     if (liked && !firstTime) {
-      likePost(String(user?.access_token), postData.uuid)
-      .then((result) => {
-        if (result instanceof Error) {
-        }
-      })
+      if (change) {
+        likePost(String(user?.access_token), postData.uuid)
+        .then((result) => {
+          if (result instanceof Error) {
+            setLiked(false)
+          }
+        })
+        setChange(false)
+      }
     } else if (!liked && !firstTime){
-      unlikePost(String(user?.access_token), postData.uuid)
-      .then((result) => {
-        if (result instanceof Error) {
-        }
-      })
+      if (change) {
+        unlikePost(String(user?.access_token), postData.uuid)
+        .then((result) => {
+          if (result instanceof Error) {
+            setLiked(true)
+          }
+        })
+        setChange(false)
+      }
     } else {
       setFirstTime(false)
     }
   }, [liked])
+
+  useEffect(() => {
+    setLiked(postData.authenticatedUserLiked)
+  }, [postData])
 
   return (
     <View
@@ -57,9 +74,9 @@ export default function Post({ postData, viewCommentButton = false }: PostProps)
           "
         >{postData.username}</Text>
       </View>
-      <View className="flex w-full">
+      <View className="flex w-full h-[300px] items-center">
         <Image
-          className="w-full h-[300px] rounded-[20px]"
+          className="h-[300px] w-[200px] rounded-[20px]"
           source={{
             uri: postData.moviePosterUrl
           }}
@@ -67,7 +84,7 @@ export default function Post({ postData, viewCommentButton = false }: PostProps)
       </View>
       <View className="w-full flex flex-row h-[50px] items-center gap-4">
         <Pressable
-          onPress={() => setLiked((oldValue) => !oldValue)}
+          onPress={() => {setLiked((oldValue) => !oldValue); setChange(true)}}
           className="
             flex
           "
@@ -78,13 +95,15 @@ export default function Post({ postData, viewCommentButton = false }: PostProps)
             color="#fff"
           />
         </Pressable>
-        <Pressable>
-          <MaterialCommunityIcons
-            name="comment-outline"
-            size={25}
-            color="#fff"
-          />
-        </Pressable>
+        {viewCommentButton && (
+          <Pressable onPress={onCommentPress}>
+            <MaterialCommunityIcons
+              name="comment-outline"
+              size={25}
+              color="#fff"
+            />
+          </Pressable>
+        )}
       </View>
       <View className="w-full">
         <Text

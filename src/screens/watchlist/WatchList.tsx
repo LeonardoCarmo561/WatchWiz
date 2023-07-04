@@ -7,14 +7,13 @@ import { Movie, getWatchlist } from "../../shared/services/api";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { useDebounce } from "../../shared/hooks";
 import { MovieContainer } from "../../shared/components";
-import { MotiProgressBar } from "moti";
-import { useMovieDetailContext } from "../../shared/contexts/DetailMovieContext";
+import { useDetailScreenContext } from "../../shared/contexts/DetailScreenContext";
 import BasePage from "../../shared/components/page/Page";
 
 export default function WatchList({ navigation }: any) {
   const { user } = useAuthContext();
   const { debounce } = useDebounce(1000);
-  const { imdbId, setImdbId } = useMovieDetailContext();
+  const { detailMovie } = useDetailScreenContext();
 
   const [isLoading, setIsLoading] = useState(true);
   const [update, setUpdate] = useState(true);
@@ -24,10 +23,14 @@ export default function WatchList({ navigation }: any) {
 
   const [movies, setMovies] = useState<Movie[]>([]);
 
+  const [moviePack, setMoviePack] = useState<Movie[][]>([])
+
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      getWatchlist(String(user?.access_token), page, size).then((result) => {
+      getWatchlist(String(user?.access_token), page, size)
+      .then((result) => {
+        setUpdate(false)
         setIsLoading(false);
         if (result instanceof Error) {
           alert("Erro ao carregar watchlist");
@@ -37,6 +40,13 @@ export default function WatchList({ navigation }: any) {
       });
     });
   }, [page, size, search, update]);
+
+  useEffect(() => {
+    if (page !== 0) {
+      let currentPack = moviePack
+
+    }
+  }, [movies])
 
   return (
     <BasePage>
@@ -94,7 +104,7 @@ export default function WatchList({ navigation }: any) {
               title={movie.title}
               image={movie.posterUrl!}
               onPress={() => {
-                setImdbId(movie.imdbId);
+                detailMovie.setImdbId(movie.imdbId);
                 navigation.navigate("detail");
               }}
             />

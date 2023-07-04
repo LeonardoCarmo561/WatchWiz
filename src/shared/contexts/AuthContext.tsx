@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useCallback, useEffect } from "react";
 import { useStorageContext } from "./StorageContext";
+import { refreshAccessToken } from "../services/api/login";
 
 interface UserData {
   access_token: string;
@@ -35,16 +36,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   useEffect(() => {
-    const accessToken = storage.getString("access_token")
     const refreshToken = storage.getString("refresh_token")
 
-    if (accessToken && refreshToken) {
-      setUser({
-        access_token: accessToken,
-        refresh_token: refreshToken
+    if (refreshToken) {
+      refreshAccessToken(refreshToken)
+      .then((result)  => {
+        if (result instanceof Error) {
+          setUser(null)
+        } else {
+          setUser({
+            access_token: result.access_token,
+            refresh_token: result.refresh_token
+          })
+          storage.set("access_token", result.access_token)
+          storage.set("refresh_token", result.refresh_token)
+        }
       })
+    } else {
+      logout()
     }
   }, [])
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      const refreshToken = storage.getString("refresh_token")
+
+      if (refreshToken) {
+        refreshAccessToken(refreshToken)
+        .then((result) => {
+          if (result instanceof Error) {
+            alert("Faça login!")
+            logout()
+          } else {
+            setUser({
+              access_token: result.access_token,
+              refresh_token: result.access_token
+            })
+            storage.set("access_token", result.access_token)
+            storage.set("refresh_token", result.refresh_token)
+          }
+        })
+      } else {
+        logout()
+      }
+    }, Number(60 * 60 * 6 * 900));
+
+    return () => clearInterval(interval);
+  });
 
   return (
     <AuthContext.Provider value={{ signed: !!user, user: user, setUser: handleSetUser, logout: logout }}>

@@ -1,52 +1,45 @@
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  ScrollView,
-  TextInput,
-  View,
-  Text,
-  Pressable,
-} from "react-native";
+import { Text, View, Image, Pressable, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Movie, getRecomendations } from "../../shared/services/api";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { MovieContainer } from "../../shared/components";
+import { useDetailScreenContext } from "../../shared/contexts/DetailScreenContext";
 
 export default function Home({ navigation }: any) {
   const { user } = useAuthContext();
+  const { detailMovie } = useDetailScreenContext();
 
   const [recomendations, setRecomendations] = useState<Movie[]>([]);
-  const [currentMovie, setCurrentMovie] = useState<Movie>()
+  const [currentMovie, setCurrentMovie] = useState<Movie>();
 
-  const [getNewMovie, setGetNewMovie] = useState(true)
+  const [getNewMovie, setGetNewMovie] = useState(true);
 
   useEffect(() => {
-    getRecomendations(String(user?.access_token), 0, 10)
-    .then((result) => {
+    getRecomendations(String(user?.access_token), 0, 10).then((result) => {
       if (result instanceof Error) {
-        alert("Erro")
+        alert("Erro");
       } else {
-        setRecomendations(result.content)
+        setRecomendations(result.content);
       }
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
     if (getNewMovie) {
-      getRecomendations(String(user?.access_token), 0, 1)
-      .then((result) => {
-        setGetNewMovie(false)
+      getRecomendations(String(user?.access_token), 0, 1).then((result) => {
+        setGetNewMovie(false);
         if (result instanceof Error) {
-          alert("Erro ao carrgar filme")
+          alert("Erro ao carrgar filme");
         } else {
-          setCurrentMovie(result.content[0])
+          setCurrentMovie(result.content[0]);
         }
-      })
+      });
     }
-  }, [getNewMovie])
+  }, [getNewMovie]);
 
-  console.log(user?.access_token)
+  console.log(user?.access_token);
 
   return (
     <View
@@ -69,9 +62,7 @@ export default function Home({ navigation }: any) {
               }}
             />
           </View>
-          <View
-            className="flex flex-1"
-          >
+          <View className="flex flex-1">
             <Text
               className="
                 text-center
@@ -96,7 +87,8 @@ export default function Home({ navigation }: any) {
             </Text>
           </View>
         </View>
-        <Pressable className="mt-4 flex justify-center items-center rounded-[20px] bg-purple-600 w-full h-[50px] border-purple-600 border-[2px]"
+        <Pressable
+          className="mt-4 flex justify-center items-center rounded-[20px] bg-purple-600 w-full h-[50px] border-purple-600 border-[2px]"
           onPress={() => setGetNewMovie(true)}
         >
           <Text className="text-white font-bold text-[20px]">
@@ -156,27 +148,26 @@ export default function Home({ navigation }: any) {
             </Text>
             <Feather name="arrow-right" color="rgb(147, 51, 234)" size={30} />
           </View>
-          <ScrollView
-            horizontal
-            className="gap-2"
-            showsHorizontalScrollIndicator={false}
-          >
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="">
             {recomendations.map((movie, index) => (
               <MovieContainer
                 key={index}
                 image={movie.posterUrl!}
-                onPress={() => {}}
+                onPress={() => {
+                  detailMovie.setImdbId(movie.imdbId)
+                  navigation.navigate("details-movie-home")
+                }}
                 title={movie.title}
               />
             ))}
-            {/* <View className="h-[150px] w-[100px] border-black border-[.5px] rounded-[20px]">
-              <Image
-                className="w-full h-full rounded-[20px]"
-                source={{
-                  uri: "https://i.pinimg.com/originals/ed/ff/ac/edffac2e5c812bb7db9b1de2412929bf.jpg",
-                }}
-              />
-            </View> */}
+            <Pressable
+              onPress={() => {}}
+              className="w-[110px] mb-5 mx-5 flex items-center gap-1"
+            >
+              <View className="h-[150px] w-[100px] flex items-center justify-center bg-black opacity-50 border-[.5px] rounded-[20px]">
+                <Text className="font-bold text-white">Veja mais...</Text>
+              </View>
+            </Pressable>
           </ScrollView>
         </View>
       </ScrollView>

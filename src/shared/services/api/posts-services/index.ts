@@ -1,12 +1,13 @@
 import { Api } from "../axios"
 
 export interface PostContent {
-  uuid: string;
   text: string;
+  uuid: string;
   username: string;
   movieTitle: string;
   creationDate: Date;
   moviePosterUrl: string;
+  authenticatedUserLiked: boolean;
 }
 
 interface PostsData {
@@ -32,36 +33,38 @@ async function getAllPosts(accessToken: string, page: number = 0, size: number =
   }
 }
 
-async function likePost(accessToken: string, uuid: string): Promise<any | Error> {
+async function likePost(accessToken: string, uuid: string): Promise<string | Error> {
   try {
     const relativeUrl = `/posts/${uuid}/likes`
 
-    const { data } = await Api.post(relativeUrl, {}, {
+    const { status } = await Api.post(relativeUrl, {}, {
       headers: {
         "Authorization": `Bearer ${accessToken}`
       }
     })
 
-    if (data) return data;
+    if (status === 200) {
+      return "Success"
+    }
 
-    return new Error("Erro ao dar like")
+    return new Error("Erro ao dar like no post")
   } catch (error) {
     console.error(error)
-    return new Error((error as {message: string}).message)
+    return new Error("Erro ao dar like")
   }
 }
 
-async function unlikePost(accessToken: string, uuid: string): Promise<any | Error> {
+async function unlikePost(accessToken: string, uuid: string): Promise<string | Error> {
   try {
     const relativeUrl = `/posts/${uuid}/likes`
 
-    const { data } = await Api.delete(relativeUrl, {
+    const { status } = await Api.delete(relativeUrl, {
       headers: {
         "Authorization": `Bearer ${accessToken}`
       }
     })
 
-    if (data) return data;
+    if (status === 200) return "Success";
 
     return new Error("Erro ao dar like")
   } catch (error) {

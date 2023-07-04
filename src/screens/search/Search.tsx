@@ -1,6 +1,7 @@
 import { View, TextInput, ScrollView } from "react-native";
-import BasePage from "../../shared/components/page/Page";
 import { useEffect, useState } from "react";
+
+import BasePage from "../../shared/components/page/Page";
 import { useDebounce } from "../../shared/hooks";
 import { Movie, searchByTitle } from "../../shared/services/api";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
@@ -15,17 +16,15 @@ export default function Search() {
   const [data, setData] = useState<Movie[]>([]);
 
   useEffect(() => {
-    if (search !== "") {
-      debounce(() => {
-        searchByTitle(String(user?.access_token), search).then((result) => {
-          if (result instanceof Error) {
-            alert("Erro ao pesquisar filmes");
-          } else {
-            setData(result);
-          }
-        });
+    debounce(() => {
+      searchByTitle(String(user?.access_token), search).then((result) => {
+        if (result instanceof Error) {
+          alert("Erro ao pesquisar filmes");
+        } else {
+          setData(result.content);
+        }
       });
-    }
+    });
   }, [search]);
 
   return (

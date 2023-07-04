@@ -7,6 +7,8 @@ import Profile from "../screens/profile/Profile";
 import Posts from "../screens/posts/Posts";
 import Search from "../screens/search/Search";
 import WatchlistRoutes from "../screens/watchlist";
+import HomeRoutes from "../screens/home";
+import PostsRoutes from "../screens/posts";
 
 const { Screen, Navigator } = createBottomTabNavigator();
 
@@ -43,7 +45,7 @@ export default function AppRoutes() {
       />
       <Screen
         name="home"
-        component={Home}
+        component={HomeRoutes}
         options={{
           tabBarIcon: ({ size, focused }) => (
             <Feather
@@ -56,7 +58,7 @@ export default function AppRoutes() {
       />
       <Screen
         name="post"
-        component={Posts}
+        component={PostsRoutes}
         options={{
           tabBarIcon: ({ size, focused }) => (
             <MaterialIcons

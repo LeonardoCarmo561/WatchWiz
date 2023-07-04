@@ -14,6 +14,10 @@ export interface Movie {
   }
 }
 
+interface SearchContent {
+  content: Movie[]
+}
+
 async function getMovieByImdbId(accessToken: string, imdbId: string, country: string = "us") {
   try {
     const relativeUrl = `/movies/get?country=${country}&imdb_id=${imdbId}`
@@ -33,9 +37,9 @@ async function getMovieByImdbId(accessToken: string, imdbId: string, country: st
   }
 }
 
-async function searchByTitle(accessToken: string, title: string, country: string = "us"): Promise<Movie[] | Error> {
+async function searchByTitle(accessToken: string, title: string, country: string = "us", page: number = 0, size: number = 10): Promise<SearchContent | Error> {
   try {
-    const relativeUrl = ``
+    const relativeUrl = `/search/title?country=${country}&title=${title}&page=${page}&size=${size}`
 
     const { data } = await Api.get(relativeUrl, {
       headers: {
