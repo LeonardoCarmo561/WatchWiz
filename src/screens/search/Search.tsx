@@ -1,23 +1,29 @@
-import { View, TextInput, ScrollView } from "react-native";
-import { useEffect, useState } from "react";
+import { View, TextInput, ScrollView, Text } from "react-native";
+import { useEffect, useRef, useState } from "react";
 
 import BasePage from "../../shared/components/page/Page";
 import { useDebounce } from "../../shared/hooks";
 import { Movie, searchByTitle } from "../../shared/services/api";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { MovieContainer } from "../../shared/components";
+import { useDetailScreenContext } from "../../shared/contexts/DetailScreenContext";
 
-export default function Search() {
+export default function Search({ navigation }: any) {
   const { debounce } = useDebounce(1500);
   const { user } = useAuthContext();
+  const { detailMovie } = useDetailScreenContext();
 
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(30)
   const [search, setSearch] = useState("");
-
   const [data, setData] = useState<Movie[]>([]);
+  const [multiData, setMultiData] = useState<Movie[]>([]);
+
+  // const lastSearchRef = useRef("");
 
   useEffect(() => {
     debounce(() => {
-      searchByTitle(String(user?.access_token), search).then((result) => {
+      searchByTitle(String(user?.access_token), search, "us", page, size).then((result) => {
         if (result instanceof Error) {
           alert("Erro ao pesquisar filmes");
         } else {
@@ -25,7 +31,24 @@ export default function Search() {
         }
       });
     });
-  }, [search]);
+  }, [search, size, page]);
+
+  // useEffect(() => {
+  //   if (lastSearchRef.current !== search) {
+  //     lastSearchRef.current = search
+  //     setMultiData(data)
+  //     if (data.length === size) {
+  //       setPage((oldvalue) => oldvalue + 1)
+  //     }
+  //   } else {
+  //     setMultiData((oldValue) => [...oldValue, ...data])
+  //     if (data.length === size) {
+  //       setPage((oldvalue) => oldvalue + 1)
+  //     }
+  //   }
+  // }, [data])
+
+  console.log(user?.access_token)
 
   return (
     <BasePage>
@@ -52,14 +75,21 @@ export default function Search() {
           "
         />
       </View>
-      <ScrollView className="w-full">
-        {data.map((movie) => (
-          <MovieContainer
-            image={movie.posterUrls.original}
-            onPress={() => {}}
-            title={movie.title}
-          />
-        ))}
+      <ScrollView className="mt-3">
+        <View className="flex-row flex-wrap w-full justify-center items-center">
+          {data.map((movie, index) => (
+            <View key={index} className="p-3">
+              <MovieContainer
+                image={movie.posterURLs.original}
+                onPress={() => {
+                  detailMovie.setImdbId(movie.imdbId)
+                  navigation.navigate("search-movie-details")
+                }}
+                title={movie.title}
+              />
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </BasePage>
   );

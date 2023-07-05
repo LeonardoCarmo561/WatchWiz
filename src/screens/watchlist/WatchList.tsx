@@ -97,18 +97,22 @@ export default function WatchList({ navigation }: any) {
             </Text>
           </View>
         )}
-        <ScrollView id="movies" className="gap-8 w-full flex" horizontal>
-          {movies.map((movie, index) => (
-            <MovieContainer
-              key={index}
-              title={movie.title}
-              image={movie.posterUrl!}
-              onPress={() => {
-                detailMovie.setImdbId(movie.imdbId);
-                navigation.navigate("detail");
-              }}
-            />
-          ))}
+        <ScrollView id="movies">
+          <View className="flex-row flex-wrap w-full items-center">
+            {movies.map((movie, index) => (
+              <View key={index} className="p-3">
+                <MovieContainer
+                  key={index}
+                  title={movie.title}
+                  image={movie.posterUrl!}
+                  onPress={() => {
+                    detailMovie.setImdbId(movie.imdbId);
+                    navigation.navigate("detail");
+                  }}
+                />
+              </View>
+            ))}
+          </View>
         </ScrollView>
       </View>
     </BasePage>

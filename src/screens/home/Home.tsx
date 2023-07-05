@@ -39,8 +39,6 @@ export default function Home({ navigation }: any) {
     }
   }, [getNewMovie]);
 
-  console.log(user?.access_token);
-
   return (
     <View
       className="
@@ -150,15 +148,22 @@ export default function Home({ navigation }: any) {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="">
             {recomendations.map((movie, index) => (
-              <MovieContainer
+              <View
                 key={index}
-                image={movie.posterUrl!}
-                onPress={() => {
-                  detailMovie.setImdbId(movie.imdbId)
-                  navigation.navigate("details-movie-home")
-                }}
-                title={movie.title}
-              />
+                className="
+                  flex
+                  mx-1
+                "
+              >
+                <MovieContainer
+                  image={movie.posterUrl!}
+                  onPress={() => {
+                    detailMovie.setImdbId(movie.imdbId)
+                    navigation.navigate("details-movie-home")
+                  }}
+                  title={movie.title}
+                />
+              </View>
             ))}
             <Pressable
               onPress={() => {}}

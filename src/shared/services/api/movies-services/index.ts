@@ -9,7 +9,7 @@ export interface Movie {
   overview: string;
   posterUrl?: string;
   imdbRating: number;
-  posterUrls: {
+  posterURLs: {
     original: string;
   }
 }
@@ -18,9 +18,9 @@ interface SearchContent {
   content: Movie[]
 }
 
-async function getMovieByImdbId(accessToken: string, imdbId: string, country: string = "us") {
+async function getMovieByImdbId(accessToken: string, imdbId: string, country: string = "us", page: number = 0, size: number = 3) {
   try {
-    const relativeUrl = `/movies/get?country=${country}&imdb_id=${imdbId}`
+    const relativeUrl = `/movies/get?country=${country}&imdb_id=${imdbId}&page=${page}&size=${size}`
 
     const { data } = await Api.get(relativeUrl, {
       headers: {

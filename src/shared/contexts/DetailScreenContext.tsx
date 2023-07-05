@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from "react";
+import { PostContent } from "../services/api";
 
 
 interface DetailScreenContextData {
@@ -9,6 +10,10 @@ interface DetailScreenContextData {
   commentPost: {
     uuid: string;
     setUuid(e: string): void;
+  },
+  postData: {
+    data: PostContent | null;
+    setData(value: PostContent): void;
   }
 }
 
@@ -22,9 +27,18 @@ export default function DetailScreenProvider({ children }: DetailScreenProviderP
 
   const [imdbId, setImdbId] = useState("");
   const [postUuid, setPostUuid] = useState("");
+  const [postData, setPostData] = useState<PostContent | null>(null);
 
   const handleSetImdbId = useCallback((id: string) => {
     setImdbId(id)
+  }, [])
+
+  const handleSetPostUuid = useCallback((e: string) => {
+    setPostUuid(e)
+  }, [])
+
+  const handleSetPostData = useCallback((e: PostContent) => {
+    setPostData(e)
   }, [])
 
   return (
@@ -36,7 +50,11 @@ export default function DetailScreenProvider({ children }: DetailScreenProviderP
         },
         commentPost: {
           uuid: postUuid,
-          setUuid: setPostUuid,
+          setUuid: handleSetPostUuid,
+        },
+        postData: {
+          data: postData,
+          setData: handleSetPostData
         }
       }}
     >

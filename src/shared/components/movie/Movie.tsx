@@ -14,7 +14,7 @@ export function MovieContainer({ title, image, onPress }: MovieContainerPros) {
 
   return (
     <Pressable onPress={onPress}>
-      <View className="w-[110px] mb-5 mx-5 flex items-center justify-center gap-1">
+      <View className="w-[100px] flex items-center justify-center">
         <View className="h-[150px] w-[100px] border-black border-[.5px] rounded-[20px]">
           {!loaded && (
             <Skeleton

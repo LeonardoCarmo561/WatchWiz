@@ -9,6 +9,7 @@ import Search from "../screens/search/Search";
 import WatchlistRoutes from "../screens/watchlist";
 import HomeRoutes from "../screens/home";
 import PostsRoutes from "../screens/posts";
+import SearchRoutes from "../screens/search";
 
 const { Screen, Navigator } = createBottomTabNavigator();
 
@@ -71,7 +72,7 @@ export default function AppRoutes() {
       />
       <Screen
         name="pesquisar"
-        component={Search}
+        component={SearchRoutes}
         options={{
           tabBarIcon: ({ size, focused }) => (
             <MaterialIcons

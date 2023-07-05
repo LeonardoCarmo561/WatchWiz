@@ -7,6 +7,15 @@ export interface ICreateUser {
   birthdate?: string;
 }
 
+export interface UserData {
+  birthdate: string,
+  email:string,
+  enabled: boolean,
+  registrationDate: string,
+  username: string,
+  uuid: string
+}
+
 const createUser = async (formData: {}): Promise<ICreateUser | Error> => {
   try {
     const relativeUrl = "/auth/signup"

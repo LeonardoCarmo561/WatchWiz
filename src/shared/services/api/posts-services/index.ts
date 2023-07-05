@@ -1,13 +1,15 @@
 import { Api } from "../axios"
 
 export interface PostContent {
-  text: string;
-  uuid: string;
-  username: string;
-  movieTitle: string;
-  creationDate: Date;
-  moviePosterUrl: string;
-  authenticatedUserLiked: boolean;
+  authenticatedUserLiked: boolean,
+  creationDate: string,
+  moviePosterUrl: string,
+  movieRate: number,
+  movieTitle: string,
+  text: string,
+  username: string,
+  uuid: string
+
 }
 
 interface PostsData {
