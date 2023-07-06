@@ -37,7 +37,7 @@ export default function Posts({ navigation }: any) {
 
   return (
     <BasePage>
-    <View className="p-4 pt-8">
+    <View className="p-4 pt-8 pb-10">
       <SearchBox
         value={search}
         placeHolder="Pesquise um usuário..."

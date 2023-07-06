@@ -56,6 +56,7 @@ export default function Comments() {
 
   return (
     <BasePage>
+    <View className="p-4 pt-8 pb-[60px]">
       <ScrollView>
         <Post
           postData={postData.data!}
@@ -104,6 +105,7 @@ export default function Comments() {
             />
           </View>
         </Pressable>
+      </View>
       </View>
     </BasePage>
   )
