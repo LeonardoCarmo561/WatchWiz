@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { Text, View, Image, Pressable, ScrollView } from "react-native";
+import { useEffect, useLayoutEffect, useState } from "react";
+import {
+  Text,
+  View,
+  Image,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  Platform,
+} from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Movie, getRecomendations } from "../../shared/services/api";
 import { useAuthContext } from "../../shared/contexts/AuthContext";
 import { MovieContainer } from "../../shared/components";
 import { useDetailScreenContext } from "../../shared/contexts/DetailScreenContext";
+import BasePage from "../../shared/components/page/Page";
 
 export default function Home({ navigation }: any) {
   const { user } = useAuthContext();
@@ -40,16 +48,8 @@ export default function Home({ navigation }: any) {
   }, [getNewMovie]);
 
   return (
-    <View
-      className="
-        flex
-        w-full h-full
-        bg-gray-900
-        p-2
-        pt-[40px]
-      "
-    >
-      <StatusBar style="light" translucent />
+    <BasePage>
+    <View className="pt-[40px]">
       <ScrollView>
         <View className="flex flex-row gap-2 w-full">
           <View className="h-[225px] w-[150px] border-black border-[.5px] rounded-[20px]">
@@ -146,7 +146,11 @@ export default function Home({ navigation }: any) {
             </Text>
             <Feather name="arrow-right" color="rgb(147, 51, 234)" size={30} />
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className=""
+          >
             {recomendations.map((movie, index) => (
               <View
                 key={index}
@@ -158,8 +162,8 @@ export default function Home({ navigation }: any) {
                 <MovieContainer
                   image={movie.posterUrl!}
                   onPress={() => {
-                    detailMovie.setImdbId(movie.imdbId)
-                    navigation.navigate("details-movie-home")
+                    detailMovie.setImdbId(movie.imdbId);
+                    navigation.navigate("details-movie-home");
                   }}
                   title={movie.title}
                 />
@@ -176,6 +180,7 @@ export default function Home({ navigation }: any) {
           </ScrollView>
         </View>
       </ScrollView>
-    </View>
+      </View>
+    </BasePage>
   );
 }

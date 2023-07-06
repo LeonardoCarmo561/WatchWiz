@@ -37,11 +37,12 @@ export default function Posts({ navigation }: any) {
 
   return (
     <BasePage>
-    <SearchBox
-      value={search}
-      placeHolder="Pesquise um usuário..."
-      setValue={setSearch}
-    />
+    <View className="p-4 pt-8">
+      <SearchBox
+        value={search}
+        placeHolder="Pesquise um usuário..."
+        setValue={setSearch}
+      />
       <ScrollView className="w-full">
         {data.map((post, index) => (
           <View className="pb-6">
@@ -61,6 +62,7 @@ export default function Posts({ navigation }: any) {
           </View>
         ))}
       </ScrollView>
+      </View>
     </BasePage>
   )
 }

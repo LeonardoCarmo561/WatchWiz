@@ -52,6 +52,7 @@ export default function Search({ navigation }: any) {
 
   return (
     <BasePage>
+    <View className="p-4 pt-8">
       <View
         className="
           flex
@@ -91,6 +92,7 @@ export default function Search({ navigation }: any) {
           ))}
         </View>
       </ScrollView>
+      </View>
     </BasePage>
   );
 }

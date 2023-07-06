@@ -75,7 +75,27 @@ async function unlikePost(accessToken: string, uuid: string): Promise<string | E
   }
 }
 
+async function createNewPost(accessToken: string, formData: {}): Promise<string | Error> {
+  try {
+    const relativeUrl = `/posts`
+
+    const { status } = await Api.post(relativeUrl, formData, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+
+    if (status === 200) return "success"
+
+    return new Error("Error while create post")
+  } catch (error) {
+    console.error(error)
+    return new Error((error as {message: string}).message)
+  }
+}
+
 export {
+  createNewPost,
   getAllPosts,
   unlikePost,
   likePost,

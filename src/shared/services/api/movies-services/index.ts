@@ -9,6 +9,9 @@ export interface Movie {
   overview: string;
   posterUrl?: string;
   imdbRating: number;
+  runtime: number;
+  type: string;
+  year: number;
   posterURLs: {
     original: string;
   }

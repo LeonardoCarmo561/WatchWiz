@@ -1,11 +1,7 @@
 import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import WatchList from "../screens/watchlist/WatchList";
-import Home from "../screens/home/Home";
 import Profile from "../screens/profile/Profile";
-import Posts from "../screens/posts/Posts";
-import Search from "../screens/search/Search";
 import WatchlistRoutes from "../screens/watchlist";
 import HomeRoutes from "../screens/home";
 import PostsRoutes from "../screens/posts";
